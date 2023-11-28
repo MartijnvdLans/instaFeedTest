@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Feed</title>
+  <style>
+    #instagram-feed {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+    }
+    .instagram-post {
+      margin: 10px;
+    }
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+    <h1>Test</h1>
+
+<div id="instagram-feed"></div>
+
+<script>
+  // Replace 'YOUR_ACCESS_TOKEN' with your actual access token
+  const accessToken = 'IGQWRPNkhpV0xDREE5SGc5ZA05vQS1seFBKaGVMdU5IbjVWcEw3ZA3ZAuN0taXzBOT19GREYwZAnF6QlBJMGN2NzhQRXFmaVZAqQUZAhMUdia2JVS2JnQ1d5em11aEQyQ1hBUGFza3RrTzR5eDVORThoQkRMd1A1TGxxYlkZD';
+
+  // Replace 'YOUR_INSTAGRAM_USER_ID' with your actual Instagram user ID
+  const userId = '1437237083802594';
+
+  // Number of posts to fetch
+  const numPosts = 8;
+
+  // Instagram API endpoint
+  const apiUrl = `https://graph.instagram.com/v12.0/${userId}/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&access_token=${accessToken}&limit=${numPosts}`;
+
+  // Fetch Instagram posts
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      const feedContainer = document.getElementById('instagram-feed');
+
+      data.data.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'instagram-post';
+
+        if (post.media_type === 'IMAGE') {
+          const imgElement = document.createElement('img');
+          imgElement.src = post.media_url;
+          imgElement.alt = post.caption || 'Instagram Image';
+
+          const captionElement = document.createElement('p');
+          captionElement.textContent = post.caption || '';
+
+          postElement.appendChild(imgElement);
+          postElement.appendChild(captionElement);
+          feedContainer.appendChild(postElement);
+        }
+      });
+    })
+    .catch(error => console.error('Error fetching Instagram feed:', error));
+</script>
+
+</body>
+</html>
